@@ -1,20 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from "react";
+import {Button, View} from "react-native";
+import { TodoItem } from "./TodoItem";
+import { styles } from "./styles";
 
 export default function App() {
+  const [todoList, setTodoList] = useState([])
+
+  //create a function to add a new todo item/task to the list
+  const addTask = () =>{
+    setTodoList([
+      ...todoList,
+      {id: String(new Date().getTime()), title: "New Task"}
+    ])
+
+    
+  }
+
+  const deleteTask = (id) =>{
+    setTodoList(todoList.filter((todo) => todo.id !== id))
+  }
+
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <View style={{flex :1}}>
+        {todoList.map(({id, title}) => (
+          <TodoItem key={id} id={id} title={title} onPress={deleteTask}/>
+        ))}
+      </View>
+      <Button title="Add Task" onPress={addTask} />
+     
     </View>
+
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
